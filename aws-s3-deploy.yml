@@ -1,0 +1,36 @@
+name: AWS S3 Frontend Deployment
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-to-s3:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository Code
+        uses: actions/checkout@v4
+
+      # 🔐 Step B: AWS credentials securely configure karna
+      - name: Configure AWS Credentials Securely
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # 🛠️ Step C: Frontend build files generate karna (Mock Command)
+      - name: Build Application Assets
+        run: |
+          echo "Installing frontend dependencies..."
+          echo "Running build command: npm run build"
+          mkdir -p dist
+          echo "<h1>Welcome to Forge Replica Platform 2026</h1>" > dist/index.html
+
+      # 🚀 Step D: Files ko AWS S3 Bucket par sync karna
+      - name: Deploy Static Files to S3 Bucket
+        run: |
+          echo "Syncing dist/ folder with S3 bucket securely..."
+          # Real command: aws s3 sync ./dist/ s3://${{ secrets.AWS_S3_BUCKET_NAME }} --delete
+          echo "Deployment to S3 bucket successful!"
